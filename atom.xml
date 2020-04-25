@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>-promise-</title>
-  
+  <icon>https://www.gravatar.com/avatar/c30e9375361bab44cebaa2e460e7eb3e</icon>
   
   <link href="/atom.xml" rel="self"/>
   
@@ -11,7 +11,7 @@
   
   <author>
     <name>-promise-</name>
-    
+    <email>1901213079@pku.edu.cn</email>
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
