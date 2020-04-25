@@ -45,9 +45,9 @@
 <li>模型未来可以与  model distillation与 sparse attention相结合来提高推理速度，这应该是一个不错的研究方向</li>
 </ul>
 ]]></content>
-      <tags>
-        <tag>bert</tag>
-      </tags>
+      <categories>
+        <category>categories</category>
+      </categories>
   </entry>
   <entry>
     <title>Hello World</title>
