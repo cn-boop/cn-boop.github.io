@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://cn-boop.github.io/"/>
-  <updated>2020-04-24T03:24:57.218Z</updated>
+  <updated>2020-04-25T01:59:06.507Z</updated>
   <id>https://cn-boop.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>justtry</title>
+    <link href="https://cn-boop.github.io/2020/04/24/justtry/"/>
+    <id>https://cn-boop.github.io/2020/04/24/justtry/</id>
+    <published>2020-04-24T12:08:03.000Z</published>
+    <updated>2020-04-25T01:59:06.507Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;toc_0&quot; align=&#39;center&#39;&gt;Assignment 8
+&lt;/h1&gt;
+&lt;h3 id=&quot;toc_0&quot; align=&#39;center&#39;&gt;陈诺
+&lt;/h3&gt;
+### 1.Edit
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="leetcode" scheme="https://cn-boop.github.io/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>

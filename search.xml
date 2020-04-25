@@ -18,4 +18,60 @@
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
   </entry>
+  <entry>
+    <title>justtry</title>
+    <url>/2020/04/24/justtry/</url>
+    <content><![CDATA[<h1 id="toc_0" align='center'>Assignment 8
+</h1>
+<h3 id="toc_0" align='center'>陈诺
+</h3>
+### 1.Edit Distance
+
+<ul>
+<li><p>解题思路：用动态规划的思路，维护一个二维的数组 dp，其大小为 mxn，m和n分别为 word1 和 word2 的长度。dp[i][j] 表示从 word1 的前i个字符转换到 word2 的前j个字符所需要的步骤。先给这个二维数组 dp 的第一行第一列赋值，这个很简单，因为第一行和第一列对应的总有一个字符串是空串，于是转换步骤完全是另一个字符串的长度。<br>状态转移方程：</p>
+<pre><code>dp[i][j] =     /    dp[i - 1][j - 1]                                                                   if word1[i - 1] == word2[j - 1]
+
+             \    min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1            else</code></pre></li>
+</ul>
+<ul>
+<li><p>代码函数如下：</p>
+<p><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.37.png" alt=""></p>
+</li>
+<li><p>运行结果：<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.32.png" alt=""></p>
+</li>
+</ul>
+<h3 id="2-Burst-balloons"><a href="#2-Burst-balloons" class="headerlink" title="2.Burst balloons"></a>2.Burst balloons</h3><ul>
+<li>解题思路：</li>
+</ul>
+<p><strong>分析最优子结构</strong></p>
+<p><strong>正向思考</strong></p>
+<p>以 [3, 1, 5][3,1,5] 为例，对于第一次选择，我们有三种选择。</p>
+<p>选择 3 将问题分解为左边的子问题： [][] 和 右边子问题： [1, 5][1,5]</p>
+<p>其解等于： [] + [1, 5] + 1 * 3 * 1[]+[1,5]+1∗3∗1</p>
+<p>选择1 将问题分解为左边的子问题： [3][3] 和 右边子问题： [5][5]</p>
+<p>其解等于： [3] + [5] + 3 * 1 * 5[3]+[5]+3∗1∗5</p>
+<p>选择5 将问题分解为左边的子问题： [3, 1][3,1] 和 右边子问题： [][]</p>
+<p>其解等于： [3, 1] + [] * 1 * 5 * 1[3,1]+[]∗1∗5∗1</p>
+<p>发现，上面的解时错的。因为正向思考的情况下，以选择 1 为例，在点爆 1 气球后，两个左右子问题并不是独立的，所以这给计算子问题带来了障碍，怎么处理才能忽略中间的 1 呢？</p>
+<p><strong>逆向思考</strong></p>
+<p>以 [3, 1, 5][3,1,5] 为例，首先拿一个气球，把这个气球当做最后一个气球，然后点爆它。这样就能够将这个气球的左右两个子问题独立开。</p>
+<p>换种方式来说，我们选这1这个气球，然后优先点爆左边和右边的气球之后，再最后点爆这个气嘴，这时可以看出左右两个子问题是独立的，他们只和1这个气球有关联。</p>
+<p>定义状态转移方程<br>dp[i][j]dp[i][j] 从 ii 到 jj 个气球（闭区间）能够获取的最大的硬币数量</p>
+<p>dp[i][j] = dp[i][k - 1] + dp[k + 1][j] + nums[i - 1] * nums[k] * nums[j + 1]<em>(i &lt;= k &lt;= j) dp[i][j]=dp[i][k−1]+dp[k+1][j]+nums[i−1]*nums[k] * nums *[j+1]</em>(i&lt;=k&lt;=j)</p>
+<ul>
+<li>函数代码与运行结果：<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-22%E4%B8%8B%E5%8D%889.39.56.png" alt=""></li>
+</ul>
+<h3 id="3-My-Calendar"><a href="#3-My-Calendar" class="headerlink" title="3.My Calendar"></a>3.My Calendar</h3><ul>
+<li><p>思路：我们用一个map来建立起始时间和结束时间的映射，map会按照起始时间进行自动排序。然后对于新进来的区间，我们在已有区间中查找第一个不小于新入区间的起始时间的区间，如果这个区间存在的话，说明新入区间的起始时间小于等于当前区间，也就是解法一中的第二个if情况，当前区间起始时间小于新入区间结束时间的话返回false。我们还要跟前面一个区间进行查重叠操作，那么判断如果当前区间不是第一个区间的话，就找到前一个区间，此时是解法一中第一个if情况，并且如果前一个区间的结束时间大于新入区间的起始时间的话，返回false。否则就建立新的映射，返回true即可</p>
+</li>
+<li><p>代码：<img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.43.04.png" alt=""></p>
+</li>
+<li><p>运行结果：<img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.42.59.png" alt=""></p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
 </search>
