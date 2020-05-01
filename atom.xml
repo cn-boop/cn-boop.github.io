@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://cn-boop.github.io/"/>
-  <updated>2020-04-29T03:13:05.998Z</updated>
+  <updated>2020-05-01T16:03:39.620Z</updated>
   <id>https://cn-boop.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>a happy dog</title>
+    <link href="https://cn-boop.github.io/2020/05/01/a-happy-dog/"/>
+    <id>https://cn-boop.github.io/2020/05/01/a-happy-dog/</id>
+    <published>2020-05-01T15:58:02.000Z</published>
+    <updated>2020-05-01T16:03:39.620Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;/Users/chennuo/Downloads/IMG_0012.PNG&quot;
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="paint" scheme="https://cn-boop.github.io/tags/paint/"/>
+    
+  </entry>
   
   <entry>
     <title>BERT系列之self-attention的计算</title>
@@ -93,29 +118,6 @@
     
     
       <category term="leetcode" scheme="https://cn-boop.github.io/tags/leetcode/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="https://cn-boop.github.io/2020/04/24/hello-world/"/>
-    <id>https://cn-boop.github.io/2020/04/24/hello-world/</id>
-    <published>2020-04-24T03:24:57.218Z</published>
-    <updated>2020-04-24T03:24:57.218Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a
-        
-      
-    
-    </summary>
-    
-    
     
   </entry>
   
