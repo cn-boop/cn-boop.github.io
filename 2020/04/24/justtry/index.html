@@ -106,9 +106,9 @@
       
 
       
-      <h1 id="toc_0" align='center'>Assignment 8
+      <h1 id="toc_0" align="center">Assignment 8
 </h1>
-<h3 id="toc_0" align='center'>陈诺
+<h3 id="toc_0" align="center">陈诺
 </h3>
 ### 1.Edit Distance
 
@@ -120,9 +120,9 @@
 </ul>
 <ul>
 <li><p>代码函数如下：</p>
-<p><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.37.png" alt=""></p>
+<p><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.37.png" alt></p>
 </li>
-<li><p>运行结果：<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.32.png" alt=""></p>
+<li><p>运行结果：<br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.32.png" alt></p>
 </li>
 </ul>
 <h3 id="2-Burst-balloons"><a href="#2-Burst-balloons" class="headerlink" title="2.Burst balloons"></a>2.Burst balloons</h3><ul>
@@ -144,14 +144,14 @@
 <p>定义状态转移方程<br>dp[i][j]dp[i][j] 从 ii 到 jj 个气球（闭区间）能够获取的最大的硬币数量</p>
 <p>dp[i][j] = dp[i][k - 1] + dp[k + 1][j] + nums[i - 1] * nums[k] * nums[j + 1]<em>(i &lt;= k &lt;= j) dp[i][j]=dp[i][k−1]+dp[k+1][j]+nums[i−1]*nums[k] * nums *[j+1]</em>(i&lt;=k&lt;=j)</p>
 <ul>
-<li>函数代码与运行结果：<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-22%E4%B8%8B%E5%8D%889.39.56.png" alt=""></li>
+<li>函数代码与运行结果：<br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-22%E4%B8%8B%E5%8D%889.39.56.png" alt></li>
 </ul>
 <h3 id="3-My-Calendar"><a href="#3-My-Calendar" class="headerlink" title="3.My Calendar"></a>3.My Calendar</h3><ul>
 <li><p>思路：我们用一个map来建立起始时间和结束时间的映射，map会按照起始时间进行自动排序。然后对于新进来的区间，我们在已有区间中查找第一个不小于新入区间的起始时间的区间，如果这个区间存在的话，说明新入区间的起始时间小于等于当前区间，也就是解法一中的第二个if情况，当前区间起始时间小于新入区间结束时间的话返回false。我们还要跟前面一个区间进行查重叠操作，那么判断如果当前区间不是第一个区间的话，就找到前一个区间，此时是解法一中第一个if情况，并且如果前一个区间的结束时间大于新入区间的起始时间的话，返回false。否则就建立新的映射，返回true即可</p>
 </li>
-<li><p>代码：<img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.43.04.png" alt=""></p>
+<li><p>代码：<img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.43.04.png" alt></p>
 </li>
-<li><p>运行结果：<img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.42.59.png" alt=""></p>
+<li><p>运行结果：<img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.42.59.png" alt></p>
 </li>
 </ul>
 

@@ -1,10 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>a happy dog</title>
+    <url>/2020/05/01/a-happy-dog/</url>
+    <content><![CDATA[<p><img src="/.io//chennuo/Downloads/IMG_0012.PNG" alt></p>
+]]></content>
+      <tags>
+        <tag>paint</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BERT系列之self-attention的计算</title>
+    <url>/2020/04/29/BERT%E7%B3%BB%E5%88%97%E4%B9%8Bself-attention%E7%9A%84%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<p>BERT基于transformer而成，而transformer的一个核心模块便是self-attention，在这里详细介绍一下self-attention及其计算过程；<br>##一、What is self-attention?</p>
+<p><strong>The animal didn’t cross the street because *</strong>it<strong>*  was too tired</strong><br>举个例子，比如上方的句子中，我们要理解it具体指代的是什么，很容易看出来，但是让机器识别出it的指代含义，却很难。因此，为了解决这种问题，便有了self-attention。<br>也就是 ：Self-attention 关注于句子内部每一个单词对其他单词的权重。（而以前的attention机制则是关注句子之间单词的权重）<br>如下图，便是一个头的self-attention对上面句子的可视化图：<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 7.png)<br>可以看到 经过了self-attention之后，it更关注于<strong>The animal</strong>。</p>
+<h2 id="二、Self-attention-in-details"><a href="#二、Self-attention-in-details" class="headerlink" title="二、Self-attention in details"></a>二、Self-attention in details</h2><p>下面详细讲述self-attention的计算过程<br>####1.<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 1.png)</p>
+<p>首先，self-attention会计算出三个新的向量，在论文中，embedding向量的维度是512维，我们把这三个向量分别称为Query、Key、Value，这三个向量是用embedding向量分别与一个矩阵相乘得到的结果，这个矩阵是随机初始化的，纬度是（512，64），并会随着BP过程，这三个参数矩阵会不断的进行更新<br>####2.</p>
+<p>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 2.png)<br>以计算thinking的self-attention值为例</p>
+<ul>
+<li>计算K、Q、V之后，便如之前的所有的attention机制一样，计算一个单词之间的score，具体计算方法是：score=q ✖️ k，如上图要计算thinking这个单词与自己的score那么就是q<sub>1 </sub> ✖️ k<sub>1 </sub>,要计算machines对thinking对score那么就是q<sub>1 </sub> ✖️ k<sub>2 </sub>；</li>
+<li>为了避免softmax时，向量之间的点积过大，导致梯度被push到很小的区域，因此在此之前会有一个scaled的操作，也就是把上一步计算的score进行一次缩放，也就是除以根号下d<sub>k </sub>,原论文中除以的是8；</li>
+<li>接着便是softmax操作，将score转化为具体的概率</li>
+<li>到现在为止，最开始计算的value vector还没有使用，所以这一步也就是将softmax的值✖️v，比如图中，分别将thinking和machine的softmax值✖️对应的value vector，再相加就得到了z<sub>1 </sub>，也就是最终输出的thinking的self-attention值。<br>####3.矩阵的self-attention计算形式<br><img src="/.io//chennuo/Desktop/blog/self-attention/%E6%88%AA%E5%B1%8F2020-04-29%E4%B8%8A%E5%8D%8811.05.27.png" alt="截屏2020-04-29上午10.11.27.png"></li>
+</ul>
+<p>事实上，在实际计算过程中，因为不可能一个vector一个vector的计算，因此都是把一个句子的所有单词转换后的embedding vector放到一个矩阵中，进行统一的计算，右边的计算公式，也就是前面整体计算公式的一个总结，在论文中也称之为 <strong>scaled dot-product attention</strong></p>
+<h2 id="三、Multi-head-attention"><a href="#三、Multi-head-attention" class="headerlink" title="三、Multi-head attention"></a>三、Multi-head attention</h2><p>在attention is all you need（2017）这篇文章中，还提到了一个多头attention的机制，在论文中提到，这样做的优点就是 可以允许模型在不同的表示子空间里学习到相关的信息。<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 3.png)</p>
+<ul>
+<li>具体做法其实很简单，就是把原来单头的参数矩阵W<sup>K</sup>、W<sup>Q</sup>、W<sup>V</sup>，由一份变成了多份，如上图，当有两个head时，就有了两种参数矩阵W<sub>0 </sub><sup>Q</sup>、W<sub>0 </sub><sup>K</sup>、W<sub>0 </sub><sup>V</sup>；W<sub>1</sub><sup>Q</sup>W、<sub>1</sub><sup>K</sup>、W<sub>1</sub><sup>V</sup>。然后分别将其与X（句子的单词embedding 矩阵）相乘，得到不同的K、 Q 、V。<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 4.png)</li>
+<li>接着经过了上文所说的scaled dot-product attention得到不同的z<sub>0</sub>，z<sub>1</sub>…z<sub>7</sub>(论文中提到的是八头）<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 5.png)</li>
+<li>最后1）把得到的所有z vector 进行concate；2）将其与一个参数矩阵W<sup>0 </sup>进行点乘，其中参数矩阵会随着模型一起进行训练；3）得到最终结果Z，其中Z也就捕获了所有头的信息<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 6.png)<br>最后把之前的所有计算过程放在一张图（上图）中，也就十分清楚了。<br><img src="/.io//chennuo/Desktop/blog/self-attention/%E6%88%AA%E5%B1%8F2020-04-29%E4%B8%8A%E5%8D%8811.06.37.png" alt="截屏2020-04-29上午10.38.35.png"><br>我们再回过头看一下，文章开头的那个例子，可以看到使用了多头以后（左边是单头的可视化结果，中间的部分是两头的可视化结果，右边是八头的可视化结果），不同的头对于<strong>it</strong>的相关注的地方是不同的，比如单头attention中比较关注<strong>The animal</strong>，而两头attention中，有一个头更关注于<strong>tired</strong>，八头则各在自己对应的子空间有不同的关注部分。</li>
+</ul>
+<h2 id="Summery"><a href="#Summery" class="headerlink" title="Summery"></a>Summery</h2><ul>
+<li>self-attention的机制很有效，也有许多值得思考的地方， 比如：multi-head提出有一部分的原因可能是为了单头时可能出现信息的bias现象；</li>
+<li>multi-head attention 中的头其实并没有一个有效的结合机制，彼此之间是独立的，那么因此google在2019年有一篇叫做talking-heads attention的文章中，对此进行了改进；</li>
+<li>最后一点，self-attention有一个致命的缺点，那就是它的计算量是很大的，尤其是多头的情况下，那么多个头每个进行计算时，时间和空间的复杂度都是O（n<sup>2</sup>),如果序列长度很长的话，会给gpu会带来很大的负担，因此关于如何减少self-attention的计算复杂性问题，有了很多的研究工作，比如sparse-attention。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>bert</category>
+      </categories>
+  </entry>
+  <entry>
     <title>BERT系列之详解ALBERT</title>
     <url>/2020/04/25/BERT%E7%B3%BB%E5%88%97%E4%B9%8B%E8%AF%A6%E8%A7%A3ALBERT/</url>
     <content><![CDATA[<p>自BERT出现之后，NLP领域取得了很大的进展，并且随着加大模型的容量，BERT模型的进度也在各个数据集上都有一些提升，但虽然提升模型的大小是能对下游任务的效果有一定的提升，但是如果进一步提升模型规模，势必会导致显存或者内存出现OOM1的问题，长时间的训练也可能是导致模型出现退化的情况。那么如何在大幅度减少模型参数的情况下，却几乎不影响bert模型精度呢？于是便有了————ALBERT</p>
-<h2 id="一、回顾bert的参数来源"><a href="#一、回顾bert的参数来源" class="headerlink" title="一、回顾bert的参数来源"></a>一、回顾bert的参数来源</h2><p><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.46.58.png" alt=""><br>bert是基于transformer实现的，我在此处截取了bert中transformer中的encoder端；transformer中的参数来源主要来源于下方（红色方框）的 token embedding projection block 和上方（蓝色方框）的attention-ffn block</p>
+<h2 id="一、回顾bert的参数来源"><a href="#一、回顾bert的参数来源" class="headerlink" title="一、回顾bert的参数来源"></a>一、回顾bert的参数来源</h2><p><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.46.58.png" alt><br>bert是基于transformer实现的，我在此处截取了bert中transformer中的encoder端；transformer中的参数来源主要来源于下方（红色方框）的 token embedding projection block 和上方（蓝色方框）的attention-ffn block</p>
 <h4 id="Attention-feed-forward-block-80-："><a href="#Attention-feed-forward-block-80-：" class="headerlink" title="Attention feed-forward block(80%)："></a>Attention feed-forward block(80%)：</h4><ul>
 <li>Parameter size  O(L x H x H)  </li>
 <li>L: layer size</li>
@@ -25,18 +65,18 @@
 </ul>
 <p>while hidden layer embeddings are context dependent.</p>
 <ul>
-<li>Token embeddings are sparsely updated.<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.06.png" alt=""><br>这个idea的来源主要是基于两点：一个就是one-hot vector进行更新时，只会更新每个单词的one-hot vector对应的那个1相关的参数（也就是图中黑色的圆圈）；<br>另外一点就是在进行one-hot embedding projection的过程中是没有单词之间的交互，只有到了后面的attention部分才有单词之间的interaction，因此基于以上两点，便有了下面的做法：<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.13.png" alt=""><br>先讲单词的one-hot vector（V-dimension） 投影到一个低纬度（E），才从这个低纬度投影投影到模型所需要的纬度(H)</li>
+<li>Token embeddings are sparsely updated.<br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.06.png" alt><br>这个idea的来源主要是基于两点：一个就是one-hot vector进行更新时，只会更新每个单词的one-hot vector对应的那个1相关的参数（也就是图中黑色的圆圈）；<br>另外一点就是在进行one-hot embedding projection的过程中是没有单词之间的交互，只有到了后面的attention部分才有单词之间的interaction，因此基于以上两点，便有了下面的做法：<br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.13.png" alt><br>先讲单词的one-hot vector（V-dimension） 投影到一个低纬度（E），才从这个低纬度投影投影到模型所需要的纬度(H)</li>
 <li><strong>结果</strong>：O(VxH)➡️O(VxE+ExH),其中E&lt;&lt;H</li>
-<li><strong>实验结果</strong>：<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.18.png" alt=""><br>可以从图中看到，E从768变为128以后，模型参数减少了17%，但是模型的精度只下降了0.6%<h4 id="Method2-Cross-layer-parameter-sharing（跨层参数共享）"><a href="#Method2-Cross-layer-parameter-sharing（跨层参数共享）" class="headerlink" title="Method2:Cross-layer parameter sharing（跨层参数共享）"></a>Method2:Cross-layer parameter sharing（跨层参数共享）</h4>第二个方法很简单，也就是<strong>同时</strong>共享transformer模块里面的attention和ffn的参数</li>
+<li><strong>实验结果</strong>：<br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.18.png" alt><br>可以从图中看到，E从768变为128以后，模型参数减少了17%，但是模型的精度只下降了0.6%<h4 id="Method2-Cross-layer-parameter-sharing（跨层参数共享）"><a href="#Method2-Cross-layer-parameter-sharing（跨层参数共享）" class="headerlink" title="Method2:Cross-layer parameter sharing（跨层参数共享）"></a>Method2:Cross-layer parameter sharing（跨层参数共享）</h4>第二个方法很简单，也就是<strong>同时</strong>共享transformer模块里面的attention和ffn的参数</li>
 <li><strong>结果</strong>：O(LxHxH)➡️O(HxH)</li>
-<li><strong>实验结果</strong>：<br><img src="/var/folders/t6/plnyvhg57ss3py62ht9nb_180000gn/T/TemporaryItems/%EF%BC%88screencaptureui%E6%AD%A3%E5%9C%A8%E5%AD%98%E5%82%A8%E6%96%87%E7%A8%BF%EF%BC%8C%E5%B7%B2%E5%AE%8C%E6%88%9018%EF%BC%89/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.52.04.png" alt=""><br>可以看到，参数共享以后，模型的参数量减少了大概百分之七十，但是模型精度减少了不到百分之三。</li>
+<li><strong>实验结果</strong>：<br><img src="/.io//folders/t6/plnyvhg57ss3py62ht9nb_180000gn/T/TemporaryItems/%EF%BC%88screencaptureui%E6%AD%A3%E5%9C%A8%E5%AD%98%E5%82%A8%E6%96%87%E7%A8%BF%EF%BC%8C%E5%B7%B2%E5%AE%8C%E6%88%9018%EF%BC%89/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.52.04.png" alt><br>可以看到，参数共享以后，模型的参数量减少了大概百分之七十，但是模型精度减少了不到百分之三。</li>
 </ul>
-<h4 id="Combing-method-1-and-method-2"><a href="#Combing-method-1-and-method-2" class="headerlink" title="Combing method 1 and method 2"></a>Combing method 1 and method 2</h4><p>论文里还展示了，两个方法同时结合起来的实验效果：<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.41.png" alt=""></p>
+<h4 id="Combing-method-1-and-method-2"><a href="#Combing-method-1-and-method-2" class="headerlink" title="Combing method 1 and method 2"></a>Combing method 1 and method 2</h4><p>论文里还展示了，两个方法同时结合起来的实验效果：<br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.41.png" alt></p>
 <p>可以看到，结合两个方法以后，ALbert -xxlarge版本模型的宽度使Bert-large的四倍，但是参数量却只有其百分之七十，而且在五个数据集上的实验结果却高了3.5%。</p>
-<h4 id="Design-better-self-supervised-learning-tasks"><a href="#Design-better-self-supervised-learning-tasks" class="headerlink" title="Design better self-supervised learning tasks"></a>Design better self-supervised learning tasks</h4><p>除了上面两个减少模型参数的方法以外，论文中还设计了两个提高模型精度对方法（trick？）<br>第一个就是设计了一个新的预训练策略：<br><strong>SOP：</strong>Sentence order prediction，摒弃了原来bert采取的NSP预训练策略，这两种方法的主要不同在于：SOP的负样本是把正样本的顺序进行颠倒，而不是如NSP是从另外一个document中采样第二句来作为负样本。<br>具体如图：<br><strong>SOP</strong><br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.49.png" alt=""><br><strong>NSP</strong><br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.53.png" alt=""></p>
+<h4 id="Design-better-self-supervised-learning-tasks"><a href="#Design-better-self-supervised-learning-tasks" class="headerlink" title="Design better self-supervised learning tasks"></a>Design better self-supervised learning tasks</h4><p>除了上面两个减少模型参数的方法以外，论文中还设计了两个提高模型精度对方法（trick？）<br>第一个就是设计了一个新的预训练策略：<br><strong>SOP：</strong>Sentence order prediction，摒弃了原来bert采取的NSP预训练策略，这两种方法的主要不同在于：SOP的负样本是把正样本的顺序进行颠倒，而不是如NSP是从另外一个document中采样第二句来作为负样本。<br>具体如图：<br><strong>SOP</strong><br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.49.png" alt><br><strong>NSP</strong><br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.53.png" alt></p>
 <ul>
-<li><strong>实验结果</strong><br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.59.png" alt=""><h4 id="Remove-dropout"><a href="#Remove-dropout" class="headerlink" title="Remove dropout"></a>Remove dropout</h4>第二个方法就是移除了dropout</li>
-<li><strong>实验结果：</strong><br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.48.06.png" alt=""><br>移除了dropout以后，作者们发现了两点：</li>
+<li><strong>实验结果</strong><br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.47.59.png" alt><h4 id="Remove-dropout"><a href="#Remove-dropout" class="headerlink" title="Remove dropout"></a>Remove dropout</h4>第二个方法就是移除了dropout</li>
+<li><strong>实验结果：</strong><br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-25%E4%B8%8A%E5%8D%8810.48.06.png" alt><br>移除了dropout以后，作者们发现了两点：</li>
 <li>第一就是模型的精度不降反升（这点很值得思考 why？？？？？）；</li>
 <li>第二就是大大减少了模型在训练过程中对显存的使用量；<h2 id="三、Summery"><a href="#三、Summery" class="headerlink" title="三、Summery"></a>三、Summery</h2></li>
 <li>论文一共提出了两种减少模型参数的方法和两种提高模型精度的策略，对于实验的分析十分清楚，建议去看原文，或者去看ALbert作者Dc.Lan曾经对该论文的直播讲述（<a href="https://www.bilibili.com/video/BV1C7411c7Ag?p=4）" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1C7411c7Ag?p=4）</a></li>
@@ -51,47 +91,9 @@
   </entry>
   <entry>
     <title>鬼泣——妹妹</title>
-    <url>/2020/05/02/%E9%AC%BC%E6%B3%A3%E2%80%94%E2%80%94%E5%A6%B9%E5%A6%B9/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>paint</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BERT系列之self-attention的计算</title>
-    <url>/2020/04/29/BERT%E7%B3%BB%E5%88%97%E4%B9%8Bself-attention%E7%9A%84%E8%AE%A1%E7%AE%97/</url>
-    <content><![CDATA[<p>BERT基于transformer而成，而transformer的一个核心模块便是self-attention，在这里详细介绍一下self-attention及其计算过程；<br>##一、What is self-attention?</p>
-<p><strong>The animal didn’t cross the street because *</strong>it<strong>*  was too tired</strong><br>举个例子，比如上方的句子中，我们要理解it具体指代的是什么，很容易看出来，但是让机器识别出it的指代含义，却很难。因此，为了解决这种问题，便有了self-attention。<br>也就是 ：Self-attention 关注于句子内部每一个单词对其他单词的权重。（而以前的attention机制则是关注句子之间单词的权重）<br>如下图，便是一个头的self-attention对上面句子的可视化图：<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 7.png)<br>可以看到 经过了self-attention之后，it更关注于<strong>The animal</strong>。</p>
-<h2 id="二、Self-attention-in-details"><a href="#二、Self-attention-in-details" class="headerlink" title="二、Self-attention in details"></a>二、Self-attention in details</h2><p>下面详细讲述self-attention的计算过程<br>####1.<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 1.png)</p>
-<p>首先，self-attention会计算出三个新的向量，在论文中，embedding向量的维度是512维，我们把这三个向量分别称为Query、Key、Value，这三个向量是用embedding向量分别与一个矩阵相乘得到的结果，这个矩阵是随机初始化的，纬度是（512，64），并会随着BP过程，这三个参数矩阵会不断的进行更新<br>####2.</p>
-<p>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 2.png)<br>以计算thinking的self-attention值为例</p>
-<ul>
-<li>计算K、Q、V之后，便如之前的所有的attention机制一样，计算一个单词之间的score，具体计算方法是：score=q ✖️ k，如上图要计算thinking这个单词与自己的score那么就是q<sub>1 </sub> ✖️ k<sub>1 </sub>,要计算machines对thinking对score那么就是q<sub>1 </sub> ✖️ k<sub>2 </sub>；</li>
-<li>为了避免softmax时，向量之间的点积过大，导致梯度被push到很小的区域，因此在此之前会有一个scaled的操作，也就是把上一步计算的score进行一次缩放，也就是除以根号下d<sub>k </sub>,原论文中除以的是8；</li>
-<li>接着便是softmax操作，将score转化为具体的概率</li>
-<li>到现在为止，最开始计算的value vector还没有使用，所以这一步也就是将softmax的值✖️v，比如图中，分别将thinking和machine的softmax值✖️对应的value vector，再相加就得到了z<sub>1 </sub>，也就是最终输出的thinking的self-attention值。<br>####3.矩阵的self-attention计算形式<br><img src="/Users/chennuo/Desktop/blog/self-attention/%E6%88%AA%E5%B1%8F2020-04-29%E4%B8%8A%E5%8D%8811.05.27.png" alt="截屏2020-04-29上午10.11.27.png"></li>
-</ul>
-<p>事实上，在实际计算过程中，因为不可能一个vector一个vector的计算，因此都是把一个句子的所有单词转换后的embedding vector放到一个矩阵中，进行统一的计算，右边的计算公式，也就是前面整体计算公式的一个总结，在论文中也称之为 <strong>scaled dot-product attention</strong></p>
-<h2 id="三、Multi-head-attention"><a href="#三、Multi-head-attention" class="headerlink" title="三、Multi-head attention"></a>三、Multi-head attention</h2><p>在attention is all you need（2017）这篇文章中，还提到了一个多头attention的机制，在论文中提到，这样做的优点就是 可以允许模型在不同的表示子空间里学习到相关的信息。<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 3.png)</p>
-<ul>
-<li>具体做法其实很简单，就是把原来单头的参数矩阵W<sup>K</sup>、W<sup>Q</sup>、W<sup>V</sup>，由一份变成了多份，如上图，当有两个head时，就有了两种参数矩阵W<sub>0 </sub><sup>Q</sup>、W<sub>0 </sub><sup>K</sup>、W<sub>0 </sub><sup>V</sup>；W<sub>1</sub><sup>Q</sup>W、<sub>1</sub><sup>K</sup>、W<sub>1</sub><sup>V</sup>。然后分别将其与X（句子的单词embedding 矩阵）相乘，得到不同的K、 Q 、V。<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 4.png)</li>
-<li>接着经过了上文所说的scaled dot-product attention得到不同的z<sub>0</sub>，z<sub>1</sub>…z<sub>7</sub>(论文中提到的是八头）<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 5.png)</li>
-<li>最后1）把得到的所有z vector 进行concate；2）将其与一个参数矩阵W<sup>0 </sup>进行点乘，其中参数矩阵会随着模型一起进行训练；3）得到最终结果Z，其中Z也就捕获了所有头的信息<br>![image.png](/Users/chennuo/Desktop/blog/self-attention/图片 6.png)<br>最后把之前的所有计算过程放在一张图（上图）中，也就十分清楚了。<br><img src="/Users/chennuo/Desktop/blog/self-attention/%E6%88%AA%E5%B1%8F2020-04-29%E4%B8%8A%E5%8D%8811.06.37.png" alt="截屏2020-04-29上午10.38.35.png"><br>我们再回过头看一下，文章开头的那个例子，可以看到使用了多头以后（左边是单头的可视化结果，中间的部分是两头的可视化结果，右边是八头的可视化结果），不同的头对于<strong>it</strong>的相关注的地方是不同的，比如单头attention中比较关注<strong>The animal</strong>，而两头attention中，有一个头更关注于<strong>tired</strong>，八头则各在自己对应的子空间有不同的关注部分。</li>
-</ul>
-<h2 id="Summery"><a href="#Summery" class="headerlink" title="Summery"></a>Summery</h2><ul>
-<li>self-attention的机制很有效，也有许多值得思考的地方， 比如：multi-head提出有一部分的原因可能是为了单头时可能出现信息的bias现象；</li>
-<li>multi-head attention 中的头其实并没有一个有效的结合机制，彼此之间是独立的，那么因此google在2019年有一篇叫做talking-heads attention的文章中，对此进行了改进；</li>
-<li>最后一点，self-attention有一个致命的缺点，那就是它的计算量是很大的，尤其是多头的情况下，那么多个头每个进行计算时，时间和空间的复杂度都是O（n<sup>2</sup>),如果序列长度很长的话，会给gpu会带来很大的负担，因此关于如何减少self-attention的计算复杂性问题，有了很多的研究工作，比如sparse-attention。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>bert</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>a happy dog</title>
-    <url>/2020/05/01/a-happy-dog/</url>
-    <content><![CDATA[<p><img src="/Users/chennuo/Downloads/IMG_0012.PNG" alt=""></p>
+    <url>/2020/05/02/%E9%AC%BC%E6%B3%A3%E2%80%94%E2%80%94%E5%A6%B9%E5%A6%B9-1/</url>
+    <content><![CDATA[<p><img src="/.io//chennuo/Documents/blog/cnblog/source/_posts/%E9%AC%BC%E6%B3%A3%E2%80%94%E2%80%94%E5%A6%B9%E5%A6%B9-1/IMG_0016.PNG" alt></p>
+
 ]]></content>
       <tags>
         <tag>paint</tag>
@@ -100,9 +102,9 @@
   <entry>
     <title>justtry</title>
     <url>/2020/04/24/justtry/</url>
-    <content><![CDATA[<h1 id="toc_0" align='center'>Assignment 8
+    <content><![CDATA[<h1 id="toc_0" align="center">Assignment 8
 </h1>
-<h3 id="toc_0" align='center'>陈诺
+<h3 id="toc_0" align="center">陈诺
 </h3>
 ### 1.Edit Distance
 
@@ -114,9 +116,9 @@
 </ul>
 <ul>
 <li><p>代码函数如下：</p>
-<p><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.37.png" alt=""></p>
+<p><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.37.png" alt></p>
 </li>
-<li><p>运行结果：<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.32.png" alt=""></p>
+<li><p>运行结果：<br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.00.32.png" alt></p>
 </li>
 </ul>
 <h3 id="2-Burst-balloons"><a href="#2-Burst-balloons" class="headerlink" title="2.Burst balloons"></a>2.Burst balloons</h3><ul>
@@ -138,14 +140,14 @@
 <p>定义状态转移方程<br>dp[i][j]dp[i][j] 从 ii 到 jj 个气球（闭区间）能够获取的最大的硬币数量</p>
 <p>dp[i][j] = dp[i][k - 1] + dp[k + 1][j] + nums[i - 1] * nums[k] * nums[j + 1]<em>(i &lt;= k &lt;= j) dp[i][j]=dp[i][k−1]+dp[k+1][j]+nums[i−1]*nums[k] * nums *[j+1]</em>(i&lt;=k&lt;=j)</p>
 <ul>
-<li>函数代码与运行结果：<br><img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-22%E4%B8%8B%E5%8D%889.39.56.png" alt=""></li>
+<li>函数代码与运行结果：<br><img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-22%E4%B8%8B%E5%8D%889.39.56.png" alt></li>
 </ul>
 <h3 id="3-My-Calendar"><a href="#3-My-Calendar" class="headerlink" title="3.My Calendar"></a>3.My Calendar</h3><ul>
 <li><p>思路：我们用一个map来建立起始时间和结束时间的映射，map会按照起始时间进行自动排序。然后对于新进来的区间，我们在已有区间中查找第一个不小于新入区间的起始时间的区间，如果这个区间存在的话，说明新入区间的起始时间小于等于当前区间，也就是解法一中的第二个if情况，当前区间起始时间小于新入区间结束时间的话返回false。我们还要跟前面一个区间进行查重叠操作，那么判断如果当前区间不是第一个区间的话，就找到前一个区间，此时是解法一中第一个if情况，并且如果前一个区间的结束时间大于新入区间的起始时间的话，返回false。否则就建立新的映射，返回true即可</p>
 </li>
-<li><p>代码：<img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.43.04.png" alt=""></p>
+<li><p>代码：<img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.43.04.png" alt></p>
 </li>
-<li><p>运行结果：<img src="/Users/chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.42.59.png" alt=""></p>
+<li><p>运行结果：<img src="/.io//chennuo/Desktop/%E6%88%AA%E5%B1%8F2020-04-23%E4%B8%8B%E5%8D%888.42.59.png" alt></p>
 </li>
 </ul>
 ]]></content>
