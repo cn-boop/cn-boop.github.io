@@ -3,7 +3,15 @@
   <entry>
     <title>a happy dog</title>
     <url>/2020/05/01/a-happy-dog/</url>
-    <content><![CDATA[<p><img src="/.io//chennuo/Downloads/IMG_0012.PNG" alt><br></p>]]></content>
+    <content><![CDATA[<p><img src="/.io//chennuo/Documents/blog/cnblog/source/_posts/a-happy-dog/IMG_0012.PNG" alt><br><img src="/.io//05/01/a-happy-dog/IMG_0012.PNG" class title="examplename}&lt;&#x2F;p&gt;"></p>]]></content>
+      <tags>
+        <tag>paint</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>future car</title>
+    <url>/2020/05/02/future-car/</url>
+    <content><![CDATA[<p><img src="/.io//chennuo/Documents/blog/cnblog/source/_posts/future-car/%E5%B1%95%E6%9D%BF%E6%95%88%E6%9E%9C%E5%9B%BE1.JPG" alt><br><img src="/.io//chennuo/Documents/blog/cnblog/source/_posts/future-car/%E5%B1%95%E6%9D%BF%E6%95%88%E6%9E%9C%E5%9B%BE1.JPG" class title="examplename}&lt;br&gt;{%asset_img &#x2F;future-car&#x2F;展板效果图1.JPG examplename}&lt;br&gt;{%asset_img &#x2F;2020&#x2F;05&#x2F;02&#x2F;future-car&#x2F;%E5%B1%95%E6%9D%BF%E6%95%88%E6%9E%9C%E5%9B%BE1.JPG examplename}&lt;&#x2F;p&gt;"></p>]]></content>
       <tags>
         <tag>paint</tag>
       </tags>
@@ -89,16 +97,6 @@
       </categories>
   </entry>
   <entry>
-    <title>鬼泣——妹妹</title>
-    <url>/2020/05/02/%E9%AC%BC%E6%B3%A3%E2%80%94%E2%80%94%E5%A6%B9%E5%A6%B9-1/</url>
-    <content><![CDATA[<p><img src="/.io//chennuo/Documents/blog/cnblog/source/_posts/%E9%AC%BC%E6%B3%A3%E2%80%94%E2%80%94%E5%A6%B9%E5%A6%B9-1/IMG_0016.PNG" alt></p>
-
-]]></content>
-      <tags>
-        <tag>paint</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>justtry</title>
     <url>/2020/04/24/justtry/</url>
     <content><![CDATA[<h1 id="toc_0" align="center">Assignment 8
@@ -152,6 +150,16 @@
 ]]></content>
       <tags>
         <tag>leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>鬼泣——妹妹</title>
+    <url>/2020/05/02/%E9%AC%BC%E6%B3%A3%E2%80%94%E2%80%94%E5%A6%B9%E5%A6%B9-1/</url>
+    <content><![CDATA[<p><img src="/.io//chennuo/Documents/blog/cnblog/source/_posts/%E9%AC%BC%E6%B3%A3%E2%80%94%E2%80%94%E5%A6%B9%E5%A6%B9-1/IMG_0016.PNG" alt></p>
+
+]]></content>
+      <tags>
+        <tag>paint</tag>
       </tags>
   </entry>
 </search>
